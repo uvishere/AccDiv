@@ -1,0 +1,27 @@
+{
+  "name": "accdiv",
+  "version": "1.0.0",
+  "description": "Test App for ACC",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uvishere/AccDiv.git"
+  },
+  "author": "Yuba Raj Panta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uvishere/AccDiv/issues"
+  },
+  "homepage": "https://github.com/uvishere/AccDiv#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "npm": "^6.11.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
+  }
+}

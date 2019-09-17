@@ -1,57 +1,61 @@
 "use strict";
-const DEBUG = 1
+
+const DEBUG = true
+
 const express = require('express')
 const router = new express.Router()
 const data = require('../dataset/dataset.json')
 
+const { getStation, getCommonDestination } = require('../utils/station_stats')
+const getTopStation = require('../utils/top_stations')
+const getBikeNeedRepair = require('../utils/bike_needs_repair')
 
-function getStationName(id) {
-    for (const item of data) {
-        if(item.from_station_id == id) { 
-            console.log(item.from_station_name)
-            return item.from_station_name
-        } else if(item.to_station_id == id) {
-            return item.to_station_name
-        }
+router.get('/station/:station_id/stats', async (req, res) => {
+    const { station_id } = req.params
+
+    const station = getStation(station_id);
+
+    /* TODO : If station not available, send proper response */
+    if (!station) {
+        res.status(404).send({
+            error: "station not found"
+        })
     }
-}
+    else {
+        DEBUG && console.log(getCommonDestination(station_id))
+        const {to_station_id, to_station_name } = getCommonDestination(station_id)
 
-router.get('/station/:id/stats', async (req, res) => {
-    DEBUG && console.log(req.params.id)
-    const station_id = req.params.id
+        res.status(200).send({
+            from_station_id: station_id,
+            from_station: from_station_name,
+            common_destination_id: to_station_id ,
+            common_destination: to_station_name,
+        })
+    }
+})
 
-    //filter rows containing requested from_station_id
-    const filtredData = data.filter(function ( {from_station_id} ) {
-        return from_station_id == station_id
-    })
-
-    
-    const destinationCount = filtredData.reduce((agg, current) => {
-        const { to_station_id } = current
-        if (agg[to_station_id]) {
-            return {...agg, [to_station_id]: + agg[to_station_id]}
-        } else {
-            return {...agg, [to_station_id]:1}
-        }
-    }, {})
-
-    const destinations = Object.keys(destinationCount)
-
-    const commonDest = destinations.sort((a, b) => {
-        const aVal = destinationCount[a]
-        const bVal = destinationCount[b]
-        return bVal - aVal
-    })[0]
+router.get('/top_stations', async (req, res) => {
+    const topStations = getTopStation()
+    DEBUG && console.log(topStations)
 
     res.status(200).send({
-        length: filtredData.length,
-        from_station_id: station_id,
-        from_station: getStationName(station_id),
-        common_destination_id: commonDest,
-        common_destination: getStationName(commonDest),
-        message: "done"
+        message: topStations
     })
 })
 
-
+router.get('/bike_needs_repair', async (req, res) => {
+    const bikesNeedRepair = getBikeNeedRepair()
+    DEBUG && console.log(bikesNeedRepair)
+    if (!bikesNeedRepair) {
+        res.status(404).send({
+            message: "no bikes found"
+        })
+    }
+    else {
+        res.status(200).send({
+            total_bikes: bikesNeedRepair.length,
+            message: bikesNeedRepair
+        })
+    }
+})
 module.exports = router

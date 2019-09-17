@@ -19,7 +19,7 @@ function getCommonDestination(station_id) {
 	const destinationCount = filtredData.reduce((agg, current) => {
 		const { to_station_id } = current
 		const prevCount = agg[to_station_id] || 0
-		agg[to_station_id] = ++prevCount
+		agg[to_station_id] = prevCount + 1
 
 		return agg
 	}, {})

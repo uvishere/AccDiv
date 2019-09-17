@@ -17,45 +17,41 @@ router.get('/station/:station_id/stats', async (req, res) => {
 
     /* TODO : If station not available, send proper response */
     if (!station) {
-        res.status(404).send({
+        return res.status(404).send({
             error: "station not found"
         })
     }
-    else {
-        DEBUG && console.log(getCommonDestination(station_id))
-        const {to_station_id, to_station_name } = getCommonDestination(station_id)
-
-        res.status(200).send({
+    DEBUG && console.log(getCommonDestination(station_id))
+    const {to_station_id, to_station_name } = getCommonDestination(station_id)
+    const {from_station_name} = station
+    res.status(200).send({
+        data: {
             from_station_id: station_id,
             from_station: from_station_name,
-            common_destination_id: to_station_id ,
-            common_destination: to_station_name,
-        })
-    }
+            common_destination_id: to_station_id,
+            common_destination: to_station_name,    
+        },
+        message: "data fetched successfully"
+    })
 })
 
 router.get('/top_stations', async (req, res) => {
     const topStations = getTopStation()
     DEBUG && console.log(topStations)
-
+    
     res.status(200).send({
-        message: topStations
+        data: topStations,
+        message: "data fetched successfully"
     })
 })
 
 router.get('/bike_needs_repair', async (req, res) => {
     const bikesNeedRepair = getBikeNeedRepair()
     DEBUG && console.log(bikesNeedRepair)
-    if (!bikesNeedRepair) {
-        res.status(404).send({
-            message: "no bikes found"
-        })
-    }
-    else {
-        res.status(200).send({
-            total_bikes: bikesNeedRepair.length,
-            message: bikesNeedRepair
-        })
-    }
+    
+    res.status(200).send({
+        data: bikesNeedRepair,
+        message: "data fetched successfully"
+    })
 })
 module.exports = router

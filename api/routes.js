@@ -1,5 +1,5 @@
 "use strict";
-
+const DEBUG = 1
 const express = require('express')
 const router = new express.Router()
 const data = require('../dataset/dataset.json')
@@ -16,15 +16,16 @@ function getStationName(id) {
     }
 }
 
-router.post('/info', async (req, res) => {
-    
-    const { station_id } = req.body
+router.get('/station/:id/stats', async (req, res) => {
+    DEBUG && console.log(req.params.id)
+    const station_id = req.params.id
 
     //filter rows containing requested from_station_id
     const filtredData = data.filter(function ( {from_station_id} ) {
         return from_station_id == station_id
     })
 
+    
     const destinationCount = filtredData.reduce((agg, current) => {
         const { to_station_id } = current
         if (agg[to_station_id]) {

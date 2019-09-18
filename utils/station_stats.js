@@ -3,12 +3,14 @@
 const data = require('../dataset/dataset.json')
 const DEBUG = process.env.DEBUG
 
-//Get Name of the stationg from its id
-function getStation(id) {
-	return data.find(function ({ from_station_id }) {
-		return from_station_id == id
+/* TODO get station name from to_station_field */
+function getStationName(id) {
+	const station = data.find(function ({ from_station_id, to_station_id }) {
+		return from_station_id == id 
 	})
+	return station.from_station_id
 }
+
 
 //Get the common destination from the given station_id
 function getCommonDestination(station_id) {
@@ -33,4 +35,5 @@ function getCommonDestination(station_id) {
 	})[0]
 }
 
-module.exports = {getStation, getCommonDestination}
+
+module.exports = {getStationName, getCommonDestination}

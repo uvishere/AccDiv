@@ -6,24 +6,25 @@ const express = require('express')
 const router = new express.Router()
 const data = require('../dataset/dataset.json')
 
-const { getStation, getCommonDestination } = require('../utils/station_stats')
+const { getStationName, getCommonDestination } = require('../utils/station_stats')
 const getTopStation = require('../utils/top_stations')
 const getBikeNeedRepair = require('../utils/bike_needs_repair')
 
 router.get('/station/:station_id/stats', async (req, res) => {
     const { station_id } = req.params
 
-    const station = getStation(station_id);
+    const station = getStationName(station_id);
 
-    /* TODO : If station not available, send proper response */
     if (!station) {
         return res.status(404).send({
             error: "station not found"
         })
     }
-    DEBUG && console.log(getCommonDestination(station_id))
-    const {to_station_id, to_station_name } = getCommonDestination(station_id)
-    const {from_station_name} = station
+
+    const to_station_id = getCommonDestination(station_id)
+    const from_station_name = getStationName(station_id)
+    const to_station_name = getStationName(to_station_id).from_station_name
+
     res.status(200).send({
         data: {
             from_station_id: station_id,
@@ -35,6 +36,7 @@ router.get('/station/:station_id/stats', async (req, res) => {
     })
 })
 
+
 router.get('/top_stations', async (req, res) => {
     const topStations = getTopStation()
     DEBUG && console.log(topStations)
@@ -45,9 +47,9 @@ router.get('/top_stations', async (req, res) => {
     })
 })
 
+
 router.get('/bike_needs_repair', async (req, res) => {
     const bikesNeedRepair = getBikeNeedRepair()
-    DEBUG && console.log(bikesNeedRepair)
     
     res.status(200).send({
         data: bikesNeedRepair,

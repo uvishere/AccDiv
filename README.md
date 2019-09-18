@@ -48,9 +48,9 @@ GET /bike_needs_repair
 * return the age group with max count
 
 ### TODO 2 - Get a trend line for Trip Duration with respect to Start Time
-* 
-* 
-* 
+* Label x-axis by start time (Round-off seconds to minutes)
+* label y-axis to trip duration (get average between minutes)
+* export the object
 
 ### TODO 3 - remove redundancy in station_stats and implement the model structure 
 

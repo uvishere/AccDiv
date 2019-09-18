@@ -6,14 +6,14 @@ const express = require('express')
 const router = new express.Router()
 const data = require('../dataset/dataset.json')
 
-const { getStationName, getCommonDestination } = require('../utils/station_stats')
+const { getStationFromBeginning, getStationFromEnd, getCommonDestination } = require('../utils/station_stats')
 const getTopStation = require('../utils/top_stations')
 const getBikeNeedRepair = require('../utils/bike_needs_repair')
 
 router.get('/station/:station_id/stats', async (req, res) => {
     const { station_id } = req.params
 
-    const station = getStationName(station_id);
+    const station = getStationFromBeginning(station_id);
 
     if (!station) {
         return res.status(404).send({
@@ -22,8 +22,8 @@ router.get('/station/:station_id/stats', async (req, res) => {
     }
 
     const to_station_id = getCommonDestination(station_id)
-    const from_station_name = getStationName(station_id)
-    const to_station_name = getStationName(to_station_id).from_station_name
+    const {from_station_name} = getStationFromBeginning(station_id)
+    const {to_station_name} = getStationFromEnd(to_station_id)
 
     res.status(200).send({
         data: {

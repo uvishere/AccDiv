@@ -41,10 +41,20 @@ GET /top_stations
 GET /bike_needs_repair
 ```
 
-## TODO
-* Find prevalent age group of users at this station 
+### TODO 1 - Find prevalent age group of users at this station 
+* Get the filtered data with given station id
+* get age of the individual user and associate it with the age group
+* Reduce the array with respect to the age group
+* return the age group with max count
+
+### TODO 2 - Get a trend line for Trip Duration with respect to Start Time
 * 
-* Remove redundancy in station_stats and implement the model structure
 * 
+* 
+
+### TODO 3 - remove redundancy in station_stats and implement the model structure 
+
+
+### TODO 4 - Implement Tests
 
 ## License

@@ -6,7 +6,7 @@ const express = require('express')
 const router = new express.Router()
 const data = require('../dataset/dataset.json')
 
-const { getStationFromBeginning, getStationFromEnd, getCommonDestination } = require('../utils/station_stats')
+const { getStationFromBeginning, getStationFromEnd, getRevenue, getCommonDestination } = require('../utils/station_stats')
 const getTopStation = require('../utils/top_stations')
 const getBikeNeedRepair = require('../utils/bike_needs_repair')
 
@@ -24,6 +24,7 @@ router.get('/station/:station_id/stats', async (req, res) => {
     const to_station_id = getCommonDestination(station_id)
     const {from_station_name} = getStationFromBeginning(station_id)
     const {to_station_name} = getStationFromEnd(to_station_id)
+    const revenue = getRevenue(station_id)
 
     res.status(200).send({
         data: {
@@ -31,6 +32,7 @@ router.get('/station/:station_id/stats', async (req, res) => {
             from_station: from_station_name,
             common_destination_id: to_station_id,
             common_destination: to_station_name,    
+            revenue: revenue
         },
         message: "data fetched successfully"
     })

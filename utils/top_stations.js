@@ -7,7 +7,7 @@ const DEBUG = process.env.DEBUG
 const scrubStr = str => str.replace(/,/g,"")
 
 
-// Get overall top three tations
+// Get overall top three stations
 function getTopStation() {
 	const stationByTripDuration = data.reduce(function (agg, current) {
 		const currentDurationString = scrubStr(current['tripduration']);

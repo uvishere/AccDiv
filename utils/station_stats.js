@@ -20,6 +20,7 @@ function getStationFromEnd(id) {
 //change str to number
 const scrubStr = str => str.replace(/,/g,"")
 
+//calculate total revenue from the given station id
 function getRevenue(station_id) {
 	const filtredData = data.filter(function ({ from_station_id }) {
 		return from_station_id == station_id
@@ -34,6 +35,7 @@ function getRevenue(station_id) {
 	return (totalDuration / 60) * 0.1
 	
 }
+
 
 //Get the common destination from the given station_id
 function getCommonDestination(station_id) {
@@ -58,5 +60,8 @@ function getCommonDestination(station_id) {
 	})[0]
 }
 
+/* TODO filter prevalent group of users at the given station id*/
+
+/* TODO trend line for Trip Duration with respect to Start Time */
 
 module.exports = {getStationFromBeginning, getStationFromEnd, getRevenue, getCommonDestination}
